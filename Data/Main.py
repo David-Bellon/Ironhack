@@ -10,6 +10,7 @@ from sklearn.preprocessing import StandardScaler, PowerTransformer
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle
+from sklearn.metrics import r2_score
 
 
 # In[ ]:
@@ -386,134 +387,7 @@ sns.histplot(x = res_linear)
 with open("linear_regresion_model.pkl", "wb") as f:
     pickle.dump(lr, f)
 
-
-# RandomForest
-
-# In[163]:
-
-
-from sklearn.ensemble import RandomForestRegressor
-
-
-# In[164]:
-
-
-rf = RandomForestRegressor(n_estimators=1000)
-
-
-# In[165]:
-
-
-rf.fit(X_train, Y_train)
-
-
-# In[166]:
-
-
-y_pred = rf.predict(X_test)
-
-
-# In[167]:
-
-
-y_pred 
-
-
-# Scores and errors
-
-# In[168]:
-
-
-from sklearn.metrics import r2_score
-
-
-# In[169]:
-
-
-r2_score(Y_test, y_pred)
-
-
-# In[170]:
-
-
-for i in range(len(rf.feature_importances_)):
-    print("El valor de ", X_train.columns[i], "Tiene importancia: ", rf.feature_importances_[i])
-
-
-# In[171]:
-
-
-deviation = y_pred - Y_test
-
-
-# In[172]:
-
-
-deviation
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[173]:
-
-
-plt.figure(figsize=(30, 30))
-sns.histplot([y_pred, Y_test])
-
-
-# In[174]:
-
-
-plt.figure(figsize=(30, 30))
-plt.axhline()
-plt.axhline(y = 100000)
-sns.scatterplot(x = Y_test, y = deviation)
-
-
-# In[175]:
-
-
-res = pd.DataFrame(deviation)
-
-
-# In[176]:
-
-
-res.describe()
-
-
-# In[177]:
-
-
-plt.figure(figsize=(15, 15))
-plt.axvline(x = 100000, color = "red")
-plt.axvline(x = -100000, color = "red")
-sns.histplot(x = res["price"])
-
-
-# In[178]:
-
-
-plt.figure(figsize=(20, 20))
-sns.histplot(x=deviation, color= "red")
-sns.histplot(x = res_linear)
-
-
-# In[179]:
-
-
-with open("random_forest_model.pkl", "wb") as f:
-    pickle.dump(rf, f)
+#In[]
 
 
 # Gradient Boosting
@@ -570,7 +444,6 @@ errosr
 
 
 plt.figure(figsize=(20, 20))
-sns.histplot(x=deviation, color= "red")
 sns.histplot(x = res_linear)
 sns.histplot(x = errosr, color = "green")
 
@@ -590,3 +463,11 @@ sns.scatterplot(x = Y_test, y = errosr)
 with open("gradient_boosting_model.pkl", "wb") as f:
     pickle.dump(gb, f)
 
+
+# %%
+
+# %%
+
+# %%
+
+# %%
