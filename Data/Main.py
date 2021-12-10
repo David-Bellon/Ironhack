@@ -469,5 +469,3 @@ with open("gradient_boosting_model.pkl", "wb") as f:
 # %%
 
 # %%
-
-# %%
