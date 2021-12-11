@@ -52,16 +52,17 @@ sqft_lot15 = st.number_input("Enter the land square foot in 2015")
 
 
 if st.button("Get the value of the house"):
-    x = pd.DataFrame({"bedrooms": bedrooms, "bathrooms": bathrooms, "sqft_living": sqft_living, "sqft_lot": sqft_lot, "floors": floors, "waterfront": waterfront,
-    "view": view, "condition": condition, "grade": grade, "sqft_above": sqft_above, "sqft_basement": sqft_basement, "year_built": year_built, "year_renovated": year_renovated,
-    "zipcode": zipcode, "lat": lat, "long": long, "sqft_living15": sqft_living15, "sqft_lot15": sqft_lot15, "mean_price_per_zipcode": mean_price_per_zip[zipcode]})
+    x = pd.DataFrame({"bedrooms": [bedrooms], "bathrooms": [bathrooms], "sqft_living": [sqft_living], "sqft_lot": [sqft_lot], "floors": [floors], "waterfront": [waterfront],
+    "view": [view], "condition": [condition], "grade": [grade], "sqft_above": [sqft_above], "sqft_basement": [sqft_basement], "year_built": [year_built], "year_renovated": [year_renovated],
+    "zipcode": [zipcode], "lat": [lat], "long": [long], "sqft_living15": [sqft_living15], "sqft_lot15": [sqft_lot15], "mean_price_per_zipcode": [mean_price_per_zip[zipcode]]})
 
 
     #Scale Data
-    X_scaled = scaler.transform(x)
-    df_scaled = pd.DataFrame(X_scaled, columns=x.columns)
+    #X_scaled = scaler.transform(x)
+    #df_scaled = pd.DataFrame(X_scaled, columns=x.columns)
 
-    #Predict
-    prediction = grboos.predict(df_scaled)
+    #Predicts
+    prediction = grboos.predict(x)
 
-    st.success("The stimated price of the house is", prediction)
+    final_text = "The stimated value of the house is" + str(prediction)
+    st.success(final_text)
