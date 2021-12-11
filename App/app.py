@@ -1,12 +1,31 @@
 import pandas as pd
 import numpy as np
 import pickle
-from pandas.core.indexing import convert_to_index_sliceable
 import streamlit as st
-from Main.py import mean_price_per_zip
+
+df = pd.read_excel(r"Data\regression_data.xls")
+
+price_per_zip = {}
+
+zips = df["zipcode"]
+prices = df["price"]
+for i in range(len(zips)):
+    if zips[i] in price_per_zip.keys():
+        price_per_zip[zips[i]].append(prices[i])
+    else:
+        price_per_zip[zips[i]] = []
+        price_per_zip[zips[i]].append(prices[i])
+
+mean_price_per_zip = {}
+for key in price_per_zip.keys():
+    mean_price_per_zip[key] = np.mean(price_per_zip[key])
+
+
 
 grboos = pickle.load(open("Models\gradient_boosting_model.pkl", "rb"))
 linear = pickle.load(open("Models\linear_regresion_model.pkl", "rb"))
+
+scaler = pickle.load(open("Scalers\scaler.pkl", "rb"))
 
 st.write("House Price Prediction")
 st.markdown('<style>body{background-color: Black}</style>',unsafe_allow_html=True)
@@ -31,3 +50,18 @@ long = st.number_input("Enter the longitud of the house")
 sqft_living15 = st.number_input("Enter the living square foot in 2015")
 sqft_lot15 = st.number_input("Enter the land square foot in 2015")
 
+
+if st.button("Get the value of the house"):
+    x = pd.DataFrame({"bedrooms": bedrooms, "bathrooms": bathrooms, "sqft_living": sqft_living, "sqft_lot": sqft_lot, "floors": floors, "waterfront": waterfront,
+    "view": view, "condition": condition, "grade": grade, "sqft_above": sqft_above, "sqft_basement": sqft_basement, "year_built": year_built, "year_renovated": year_renovated,
+    "zipcode": zipcode, "lat": lat, "long": long, "sqft_living15": sqft_living15, "sqft_lot15": sqft_lot15, "mean_price_per_zipcode": mean_price_per_zip[zipcode]})
+
+
+    #Scale Data
+    X_scaled = scaler.transform(x)
+    df_scaled = pd.DataFrame(X_scaled, columns=x.columns)
+
+    #Predict
+    prediction = grboos.predict(df_scaled)
+
+    st.success("The stimated price of the house is", prediction)
