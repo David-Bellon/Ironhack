@@ -91,18 +91,18 @@ sns.histplot(data = df, x = "price")
 # In[ ]:
 
 
+df["view"].unique()
+
+
+# In[ ]:
+
+df["condition"].unique()
 
 
 
 # In[ ]:
 
-
-
-
-
-# In[ ]:
-
-
+df["grade"].unique()
 
 
 
