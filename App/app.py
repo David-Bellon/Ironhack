@@ -21,14 +21,25 @@ for key in price_per_zip.keys():
     mean_price_per_zip[key] = np.mean(price_per_zip[key])
 
 
-
 grboos = pickle.load(open("Models\gradient_boosting_model.pkl", "rb"))
 linear = pickle.load(open("Models\linear_regresion_model.pkl", "rb"))
 
 scaler = pickle.load(open("Scalers\scaler.pkl", "rb"))
 
-st.write("House Price Prediction")
+st.title("House Price Prediction")
+
+
+st.write("You can select one of the models or both of them and see the differences")
+st.write("We recomend ussing the gradient boosting model due to its highest acuracy")
+
+with st.expander("Select Model",):
+    l_regressin = st.checkbox("Linear_Regression")
+    g_boosting = st.checkbox("Gradient Boosting")
+
+
+
 st.markdown('<style>body{background-color: Black}</style>',unsafe_allow_html=True)
+
 
 
 bedrooms = st.number_input("Enter the number of bedrooms")
@@ -52,17 +63,43 @@ sqft_lot15 = st.number_input("Enter the land square foot in 2015")
 
 
 if st.button("Get the value of the house"):
-    x = pd.DataFrame({"bedrooms": [bedrooms], "bathrooms": [bathrooms], "sqft_living": [sqft_living], "sqft_lot": [sqft_lot], "floors": [floors], "waterfront": [waterfront],
-    "view": [view], "condition": [condition], "grade": [grade], "sqft_above": [sqft_above], "sqft_basement": [sqft_basement], "year_built": [year_built], "year_renovated": [year_renovated],
-    "zipcode": [zipcode], "lat": [lat], "long": [long], "sqft_living15": [sqft_living15], "sqft_lot15": [sqft_lot15], "mean_price_per_zipcode": [mean_price_per_zip[zipcode]]})
+
+    if g_boosting and l_regressin:
+        st.error("Please select only one model.")
+    else:
+        if g_boosting:
+            x = pd.DataFrame({"bedrooms": [bedrooms], "bathrooms": [bathrooms], "sqft_living": [sqft_living], "sqft_lot": [sqft_lot], "floors": [floors], "waterfront": [waterfront],
+            "view": [view], "condition": [condition], "grade": [grade], "sqft_above": [sqft_above], "sqft_basement": [sqft_basement], "year_built": [year_built], "year_renovated": [year_renovated],
+            "zipcode": [zipcode], "lat": [lat], "long": [long], "sqft_living15": [sqft_living15], "sqft_lot15": [sqft_lot15], "mean_price_per_zipcode": [mean_price_per_zip[zipcode]]})
 
 
-    #Scale Data
-    #X_scaled = scaler.transform(x)
-    #df_scaled = pd.DataFrame(X_scaled, columns=x.columns)
+            #Scale Data
+            #X_scaled = scaler.transform(x)
+            #df_scaled = pd.DataFrame(X_scaled, columns=x.columns)
 
-    #Predicts
-    prediction = grboos.predict(x)
+            #Predicts
+            prediction = grboos.predict(x)
 
-    final_text = "The stimated value of the house is" + str(prediction)
-    st.success(final_text)
+            final_text = "The stimated value of the house by the gradient boosting model is " + str(prediction).replace("[", "").replace("]", "") + "$"
+            st.success(final_text)
+
+        elif l_regressin:
+            y = pd.DataFrame({"bedrooms": [bedrooms], "bathrooms": [bathrooms], "sqft_living": [sqft_living], "sqft_lot": [sqft_lot], "floors": [floors], "waterfront": [waterfront],
+            "view": [view], "condition": [condition], "grade": [grade], "sqft_above": [sqft_above], "sqft_basement": [sqft_basement], "year_built": [year_built], "year_renovated": [year_renovated],
+            "zipcode": [zipcode], "lat": [lat], "long": [long], "sqft_living15": [sqft_living15], "sqft_lot15": [sqft_lot15]})
+
+
+            #Scale Data
+            X_scaled = scaler.transform(y)
+            df_scaled = pd.DataFrame(X_scaled, columns=y.columns)
+
+            #Predicts
+            prediction = np.exp(linear.predict(df_scaled))
+
+            final_text = "The stimated value of the house by the linear regression model is " + str(prediction).replace("[", "").replace("]", "") + "$"
+            st.success(final_text)
+        else:
+            st.error("Select at least one model please")
+    
+
+    
