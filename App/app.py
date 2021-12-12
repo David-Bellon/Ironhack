@@ -32,9 +32,7 @@ st.title("House Price Prediction")
 st.write("You can select one of the models or both of them and see the differences")
 st.write("We recomend ussing the gradient boosting model due to its highest acuracy")
 
-with st.expander("Select Model",):
-    l_regressin = st.checkbox("Linear_Regression")
-    g_boosting = st.checkbox("Gradient Boosting")
+l_regressin = st.radio("Select Model", ("Linear Regression", "Gradient Boosting"))
 
 
 

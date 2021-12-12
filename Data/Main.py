@@ -262,7 +262,7 @@ pt.fit(X_train_lineal)
 # In[144]:
 
 
-with open("scaler.pkl", "wb") as f:
+with open("../Scalers/scaler.pkl", "wb") as f:
     pickle.dump(pt, f)
 
 
@@ -384,7 +384,7 @@ sns.histplot(x = res_linear)
 # In[162]:
 
 
-with open("linear_regresion_model.pkl", "wb") as f:
+with open("../Models/linear_regresion_model.pkl", "wb") as f:
     pickle.dump(lr, f)
 
 #In[]
@@ -460,7 +460,7 @@ sns.scatterplot(x = Y_test, y = errosr)
 # In[190]:
 
 
-with open("gradient_boosting_model.pkl", "wb") as f:
+with open("../Models/gradient_boosting_model.pkl", "wb") as f:
     pickle.dump(gb, f)
 
 
