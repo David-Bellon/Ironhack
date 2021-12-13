@@ -3,6 +3,7 @@ import numpy as np
 import pickle
 import streamlit as st
 
+
 df = pd.read_excel(r"Data\regression_data.xls")
 
 price_per_zip = {}
@@ -32,7 +33,7 @@ st.title("House Price Prediction")
 st.write("You can select one of the models or both of them and see the differences")
 st.write("We recomend ussing the gradient boosting model due to its highest acuracy")
 
-l_regressin = st.radio("Select Model", ("Linear Regression", "Gradient Boosting"))
+model_selected = st.radio("Select Model", ("Linear Regression", "Gradient Boosting"))
 
 
 
@@ -62,42 +63,38 @@ sqft_lot15 = st.number_input("Enter the land square foot in 2015")
 
 if st.button("Get the value of the house"):
 
-    if g_boosting and l_regressin:
-        st.error("Please select only one model.")
+    if model_selected == "Gradient Boosting":
+        x = pd.DataFrame({"bedrooms": [bedrooms], "bathrooms": [bathrooms], "sqft_living": [sqft_living], "sqft_lot": [sqft_lot], "floors": [floors], "waterfront": [waterfront],
+        "view": [view], "condition": [condition], "grade": [grade], "sqft_above": [sqft_above], "sqft_basement": [sqft_basement], "year_built": [year_built], "year_renovated": [year_renovated],
+        "zipcode": [zipcode], "lat": [lat], "long": [long], "sqft_living15": [sqft_living15], "sqft_lot15": [sqft_lot15], "mean_price_per_zipcode": [mean_price_per_zip[zipcode]]})
+
+
+        #Scale Data
+        #X_scaled = scaler.transform(x)
+        #df_scaled = pd.DataFrame(X_scaled, columns=x.columns)
+
+        #Predicts
+        prediction = grboos.predict(x)
+        prediction = np.trunc(prediction)
+
+        final_text = "The stimated value of the house by the gradient boosting model is $" +  str(prediction).replace("[", "").replace("]", "").replace(".", "")
+        st.success(final_text)
+
     else:
-        if g_boosting:
-            x = pd.DataFrame({"bedrooms": [bedrooms], "bathrooms": [bathrooms], "sqft_living": [sqft_living], "sqft_lot": [sqft_lot], "floors": [floors], "waterfront": [waterfront],
-            "view": [view], "condition": [condition], "grade": [grade], "sqft_above": [sqft_above], "sqft_basement": [sqft_basement], "year_built": [year_built], "year_renovated": [year_renovated],
-            "zipcode": [zipcode], "lat": [lat], "long": [long], "sqft_living15": [sqft_living15], "sqft_lot15": [sqft_lot15], "mean_price_per_zipcode": [mean_price_per_zip[zipcode]]})
+        y = pd.DataFrame({"bedrooms": [bedrooms], "bathrooms": [bathrooms], "sqft_living": [sqft_living], "sqft_lot": [sqft_lot], "floors": [floors], "waterfront": [waterfront],
+        "view": [view], "condition": [condition], "grade": [grade], "sqft_above": [sqft_above], "sqft_basement": [sqft_basement], "year_built": [year_built], "year_renovated": [year_renovated],
+        "zipcode": [zipcode], "lat": [lat], "long": [long], "sqft_living15": [sqft_living15], "sqft_lot15": [sqft_lot15]})
 
 
-            #Scale Data
-            #X_scaled = scaler.transform(x)
-            #df_scaled = pd.DataFrame(X_scaled, columns=x.columns)
+        #Scale Data
+        X_scaled = scaler.transform(y)
+        df_scaled = pd.DataFrame(X_scaled, columns=y.columns)
 
-            #Predicts
-            prediction = grboos.predict(x)
+        #Predicts
+        prediction = np.exp(linear.predict(df_scaled))
+        prediction = np.trunc(prediction)
 
-            final_text = "The stimated value of the house by the gradient boosting model is " + str(prediction).replace("[", "").replace("]", "") + "$"
-            st.success(final_text)
-
-        elif l_regressin:
-            y = pd.DataFrame({"bedrooms": [bedrooms], "bathrooms": [bathrooms], "sqft_living": [sqft_living], "sqft_lot": [sqft_lot], "floors": [floors], "waterfront": [waterfront],
-            "view": [view], "condition": [condition], "grade": [grade], "sqft_above": [sqft_above], "sqft_basement": [sqft_basement], "year_built": [year_built], "year_renovated": [year_renovated],
-            "zipcode": [zipcode], "lat": [lat], "long": [long], "sqft_living15": [sqft_living15], "sqft_lot15": [sqft_lot15]})
-
-
-            #Scale Data
-            X_scaled = scaler.transform(y)
-            df_scaled = pd.DataFrame(X_scaled, columns=y.columns)
-
-            #Predicts
-            prediction = np.exp(linear.predict(df_scaled))
-
-            final_text = "The stimated value of the house by the linear regression model is " + str(prediction).replace("[", "").replace("]", "") + "$"
-            st.success(final_text)
-        else:
-            st.error("Select at least one model please")
-    
+        final_text = "The stimated value of the house by the linear regression model is $" + str(prediction).replace("[", "").replace("]", "").replace(".", "")
+        st.success(final_text)
 
     
