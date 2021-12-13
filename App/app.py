@@ -34,13 +34,14 @@ linear = pickle.load(open("Models\linear_regresion_model.pkl", "rb"))
 
 scaler = pickle.load(open("Scalers\scaler.pkl", "rb"))
 
-st.title("House Price Prediction")
+st.title("Bellon Alvareda SL")
 
 st.write("Welcome to our application here you can select what you whant to do, you can run the house prediction app or search for houses in our database.")
 
 page_selection = st.radio("Page", ("Prediction app", "Search houses"))
 
 if page_selection == "Prediction app":
+    st.title("House prediction App")
     st.write("You can select one of the models or both of them and see the differences")
     st.write("We recomend ussing the gradient boosting model due to its highest acuracy")
 
@@ -103,6 +104,7 @@ if page_selection == "Prediction app":
             final_text = "The stimated value of the house by the linear regression model is $" + str(prediction).replace("[", "").replace("]", "").replace(".", "")
             st.success(final_text)
 else:
+    st.title("House search")
     st.write("Select the different aspects of the house that you want.")
     selection_bed = False
     with st.expander("Bedrooms. If non in selected it will count as not filtered"):
