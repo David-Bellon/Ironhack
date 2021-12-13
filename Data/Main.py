@@ -122,7 +122,7 @@ df
 # In[ ]:
 
 
-
+df["bedrooms"].unique()
 
 
 # In[ ]:
