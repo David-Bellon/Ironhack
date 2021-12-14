@@ -439,6 +439,9 @@ errosr = Y_test - predict_gb
 
 errosr
 
+# In[]
+plt.figure(figsize=(20, 20))
+sns.histplot([predict_gb, Y_test])
 
 # In[188]:
 

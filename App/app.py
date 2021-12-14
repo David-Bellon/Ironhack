@@ -34,7 +34,7 @@ linear = pickle.load(open("Models\linear_regresion_model.pkl", "rb"))
 
 scaler = pickle.load(open("Scalers\scaler.pkl", "rb"))
 
-st.title("Bellon Alvareda SL")
+st.title("Bellón Albareda SL")
 
 st.write("Welcome to our application here you can select what you whant to do, you can run the house prediction app or search for houses in our database.")
 
